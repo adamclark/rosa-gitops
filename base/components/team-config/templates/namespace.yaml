@@ -1,0 +1,22 @@
+{{- if .Values.enabled }}
+{{- if .Values.namespaces }}
+{{- range $key := .Values.name-suffix }}
+{{ $ns:= printf "%s" .name}}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.name-$ns | quote}}
+  {{- if $key.labels }}
+  annotations:
+  {{- range $k,$v := $key.annotations }}
+    {{ $k }}: {{ $v | quote }}
+  {{- end }}
+  labels:
+  {{- range $k,$v := $key.labels }}
+    {{ $k }}: {{ $v | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

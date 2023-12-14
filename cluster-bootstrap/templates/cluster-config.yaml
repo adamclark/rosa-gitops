@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-config
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - cluster-name: {{ $.Values.cluster.name }}
+                - cluster-environment: {{ $.Values.cluster.environment }}
+          - list:
+              elements:
+                - template: cryostat
+                # - template: openshift-machine-config
+                # - template: openshift-ingress
+                # - template: openshift-marketplace
+  template:
+    metadata:
+      name: "{{ "config-{{cluster-environment}}-{{cluster-name}}-{{template}}" }}"
+      labels:
+        environment: "{{ "{{cluster-environment}}" }}" 
+        cluster: "{{ "{{cluster-name}}" }}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/adamclark/rosa-gitops.git
+        targetRevision: main
+        path: base/components/{{ "{{template}}" }}
+        helm:
+          valueFiles:
+            - {{ "/clusters/{{cluster-environment}}/conf.yaml" }}
+            - {{ "/clusters/{{cluster-environment}}/{{cluster-name}}/conf.yaml" }}
+      syncPolicy: {}

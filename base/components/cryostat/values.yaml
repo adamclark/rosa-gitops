@@ -1,0 +1,8 @@
+enabled: true
+
+operator:
+  version: cryostat-operator.2.4.0
+  channel: stable
+  installPlanApproval: Automatic
+  name: cryostat-operator
+  operatorgroup: true

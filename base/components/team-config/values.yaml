@@ -1,0 +1,4 @@
+enabled: true
+
+namespaces:
+- name-suffix: dev-01
