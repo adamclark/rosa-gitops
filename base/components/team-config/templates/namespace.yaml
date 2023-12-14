@@ -1,12 +1,13 @@
 {{- if .Values.enabled }}
 {{- if .Values.namespaces }}
-{{- range $key := .Values.name-suffix }}
+{{- range $key := .Values.namespaces }}
 {{ $ns:= printf "%s" .name}}
+{{ $ns := printf "%s-%s" $.Values.name .nameSuffix }}
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Values.name-$ns | quote}}
+  name: {{ $ns | quote}}
   {{- if $key.labels }}
   annotations:
   {{- range $k,$v := $key.annotations }}
