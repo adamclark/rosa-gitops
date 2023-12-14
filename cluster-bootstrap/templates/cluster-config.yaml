@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: cluster-config
-  namespace: openshift-gitops
 spec:
   generators:
     - matrix:
@@ -10,7 +9,7 @@ spec:
           - list:
               elements:
                 - cluster-name: {{ $.Values.cluster.name }}
-                - cluster-environment: {{ $.Values.cluster.environment }}
+                  cluster-environment: {{ $.Values.cluster.environment }}
           - list:
               elements:
                 - template: cryostat
@@ -34,3 +33,5 @@ spec:
             - {{ "/clusters/{{cluster-environment}}/conf.yaml" }}
             - {{ "/clusters/{{cluster-environment}}/{{cluster-name}}/conf.yaml" }}
       syncPolicy: {}
+      destination:
+        server: 'https://kubernetes.default.svc'

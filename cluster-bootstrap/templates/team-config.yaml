@@ -1,8 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-config
-  namespace: openshift-gitops
+  name: team-config
 spec:
   generators:
     - matrix:
@@ -10,7 +9,7 @@ spec:
           - list:
               elements:
                 - cluster-name: {{ $.Values.cluster.name }}
-                - cluster-environment: {{ $.Values.cluster.environment }}
+                  cluster-environment: {{ $.Values.cluster.environment }}
           - list:
               elements:
                 - team: app1
@@ -32,3 +31,5 @@ spec:
           valueFiles:
             - {{ "/teams/{{team}}/conf.yaml" }}
       syncPolicy: {}
+      destination:
+        server: 'https://kubernetes.default.svc'
